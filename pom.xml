@@ -12,6 +12,7 @@
         <module>jus.crypto</module>
         <module>jus.crypto.impl</module>
         <module>jus.crypto.use</module>
+        <module>java-new</module>
     </modules>
 
     <dependencies>

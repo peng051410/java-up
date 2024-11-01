@@ -10,7 +10,7 @@ public sealed interface Shape
 
     record Circle(double radius) implements Shape {
         // blank
-    }
+   }
 
     record Square(double side) implements Shape {
         // blank

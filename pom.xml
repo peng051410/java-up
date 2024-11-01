@@ -13,6 +13,10 @@
         <module>jus.crypto.impl</module>
         <module>jus.crypto.use</module>
         <module>java-new</module>
+        <module>spring</module>
+        <module>springboot</module>
+        <module>bytecode</module>
+        <module>tomcat</module>
     </modules>
 
     <dependencies>
@@ -32,6 +36,19 @@
             <artifactId>jus.crypto</artifactId>
             <version>01</version>
             <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.11.0-M1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.11.0-M1</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 

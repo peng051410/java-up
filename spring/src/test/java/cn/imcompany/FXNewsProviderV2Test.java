@@ -19,7 +19,7 @@ class FXNewsProviderV2Test {
 
     @BeforeEach
     public void setUp() {
-        fxNewsProviderV2 = new FXNewsProviderV2(new MockNewsListener(), new DowJonesNewsPersister());
+        fxNewsProviderV2 = new FXNewsProviderV2(new MockNewsListener(), new DowJonesNewsPersisterV2());
     }
 
     @Test

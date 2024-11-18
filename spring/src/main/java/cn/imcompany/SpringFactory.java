@@ -14,6 +14,8 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
+import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.core.io.ClassPathResource;
 
 /**
  * @author tomyli
@@ -30,6 +32,22 @@ public class SpringFactory {
         FXNewsProvider newsProvider = (FXNewsProvider) container.getBean("newsProvider");
         newsProvider.getAndPersistNews();
 
+        System.out.println("====================================");
+        loadWithXml(beanRegistry);
+        System.out.println("====================================");
+        loadWithXmlByFactory(beanRegistry);
+    }
+
+    private static void loadWithXmlByFactory(DefaultListableBeanFactory beanRegistry) {
+        BeanFactory xmlBeanFactory = new XmlBeanFactory(new ClassPathResource("spring-config-factory.xml"));
+        FXNewsProviderV2 newsProvider = xmlBeanFactory.getBean("fxNewsProvider", FXNewsProviderV2.class);
+        newsProvider.getAndPersistNews();
+    }
+
+    private static void loadWithXml(DefaultListableBeanFactory beanRegistry) {
+
+        new XmlBeanDefinitionReader(beanRegistry).loadBeanDefinitions("spring-config.xml");
+        ((BeanFactory) beanRegistry).getBean("fxNewsProvider", FXNewsProviderV2.class).getAndPersistNews();
     }
 
     private static BeanFactory bindViaCode(DefaultListableBeanFactory registry) {

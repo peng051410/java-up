@@ -15,6 +15,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 
 /**
@@ -36,6 +37,16 @@ public class SpringFactory {
         loadWithXml(beanRegistry);
         System.out.println("====================================");
         loadWithXmlByFactory(beanRegistry);
+
+        System.out.println("====================================");
+        loadWithGenericXml();
+    }
+
+    private static void loadWithGenericXml() {
+        GenericApplicationContext genericApplicationContext = new GenericApplicationContext();
+        new XmlBeanDefinitionReader(genericApplicationContext).loadBeanDefinitions("spring-config.xml");
+        genericApplicationContext.refresh();
+        genericApplicationContext.getBean(FXNewsProviderV2.class).getAndPersistNews();
     }
 
     private static void loadWithXmlByFactory(DefaultListableBeanFactory beanRegistry) {

@@ -1,0 +1,29 @@
+<!--
+  ~ Copyright (c) 2024, Xuelei Fan. All rights reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  -->
+
+<!-- spring-config.xml -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="dateFoo" class="cn.imcompany.property.DateFoo">
+        <property name="date" value="2024/11/11"/>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="propertyEditorRegistrars">
+            <list>
+                <ref bean="datePropertyEditorRegistrar"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="datePropertyEditorRegistrar" class="cn.imcompany.property.DatePropertyEditorRegistrar">
+        <property name="propertyEditor" ref="datePropertyEditor"/>
+    </bean>
+    <bean id="datePropertyEditor" class="cn.imcompany.property.DatePropertyEditor"/>
+
+</beans>

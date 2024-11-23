@@ -31,4 +31,18 @@
         <property name="password" value="${jdbc.password}"/>
         <property name="maxTotal" value="100"/>
         <property name="maxIdle" value="10"/>
-    </bean></beans>
+    </bean>
+
+    <bean id="dateFoo" class="cn.imcompany.property.DateFoo">
+        <property name="date" value="2024/10/11"/>
+    </bean>
+    
+    <bean class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+        <property name="customEditors">
+            <map>
+                <entry key="java.util.Date" value="cn.imcompany.property.DatePropertyEditor"/>
+            </map>
+        </property>
+    </bean>
+
+</beans>

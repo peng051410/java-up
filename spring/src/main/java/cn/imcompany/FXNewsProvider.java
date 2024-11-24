@@ -31,6 +31,14 @@ public class FXNewsProvider {
         this.newsPersister = newsPersister;
     }
 
+    public DowJonesNewsListener getNewsListener() {
+        return newsListener;
+    }
+
+    public DowJonesNewsPersister getNewsPersister() {
+        return newsPersister;
+    }
+
     public void getAndPersistNews() {
         System.out.println("getAndPersistNews");
         System.out.println("newsListener = " + newsListener);

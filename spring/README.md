@@ -5,3 +5,13 @@
 ### CustomEditorConfigurer
 1. 类型转换
 2. org.springframework.beans.propertyeditors
+
+# getBean
+AbstractBeanFactory
+## BeanWrapper
+
+# createBean
+AbstractAutowireCapableBeanFactory
+
+# Spring中使用策略模式实例化bean
+

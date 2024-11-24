@@ -8,10 +8,15 @@
 
 # getBean
 AbstractBeanFactory
-## BeanWrapper
 
 # createBean
 AbstractAutowireCapableBeanFactory
+## BeanWrapper
+## BeanPostProcessor
+主要处理标记接口实现类
+
+### InstantiationAwareBeanPostProcessor
+造成短路
 
 # Spring中使用策略模式实例化bean
 

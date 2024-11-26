@@ -1,0 +1,13 @@
+<!-- spring-config.xml -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Define FxNewsProvider bean -->
+    <bean id="xmailer" class="cn.imcompany.resource.XMailer">
+        <!-- Inject dependencies if any -->
+        <property name="template" value="classpath:mail-template.txt"/>
+    </bean>
+
+</beans>

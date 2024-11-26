@@ -6,6 +6,11 @@
 package cn.imcompany.resource;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.BeanDefinitionStoreException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.FileSystemResource;
@@ -20,6 +25,7 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -80,6 +86,49 @@ class SpringResourceTest {
         ResourcePatternResolver patternResolver = new PathMatchingResourcePatternResolver(new FileSystemResourceLoader());
         Resource resource = patternResolver.getResource("D:/tmp/aa.txt");
         assertInstanceOf(FileSystemResource.class, resource);
+    }
+
+    @Test
+    public void testApplicationContextAsResourceLoader() {
+        ResourceLoader resourceLoader = new ClassPathXmlApplicationContext("spring-config.xml");
+        Resource resource = resourceLoader.getResource("D:/tmp/aa.txt");
+        assertInstanceOf(ClassPathResource.class, resource);
+        assertFalse(resource.exists());
+
+        Resource resource1 = resourceLoader.getResource("http://www.baidu.com");
+        assertInstanceOf(UrlResource.class, resource1);
+    }
+
+    @Test
+    public void testBeanAwareUseResourceLoader() {
+        AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext("cn.imcompany.resource");
+        applicationContext.getBean(FooBar.class).foo("D:/tmp/aa.txt");
+        applicationContext.getBean(FooBar2.class).foo("D:/tmp/aa.txt");
+    }
+
+    @Test
+    public void testSpringResource() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-resource.xml");
+        XMailer bean = context.getBean(XMailer.class);
+        bean.sendMail();
+    }
+
+    @Test
+    public void testSpringClassPathPrefix() {
+        ApplicationContext context = new FileSystemXmlApplicationContext("classpath:spring-resource.xml");
+        Resource resource = context.getResource("D:/tmp/aa.txt");
+        assertInstanceOf(FileSystemResource.class, resource);
+
+        context.getBean(XMailer.class).sendMail();
+    }
+
+    @Test
+    public void testFileSystemApplicationContext() {
+
+        assertThrows(BeanDefinitionStoreException.class, () -> {
+            // file not exist
+            ApplicationContext context = new FileSystemXmlApplicationContext("/tmp/spring-resource.xml");
+        });
     }
 
 }

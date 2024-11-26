@@ -5,9 +5,12 @@
 
 package cn.imcompany.factory;
 
+import org.springframework.beans.factory.FactoryBean;
 import cn.imcompany.FXNewsProviderV2;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import java.time.LocalDate;
 
 /**
  * @author tomyli
@@ -16,7 +19,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class FactoryInjectMain {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-static-factory.xml");
         Foo foo = applicationContext.getBean(Foo.class);
         System.out.println(foo);
@@ -25,6 +28,19 @@ public class FactoryInjectMain {
         ApplicationContext applicationContext2 = new ClassPathXmlApplicationContext("spring-factory.xml");
         Foo foo2 = applicationContext2.getBean(Foo.class);
         foo2.sayZoo();
+
+        ApplicationContext applicationContext3 = new ClassPathXmlApplicationContext("spring-factory-factorybean.xml");
+        Object obj = applicationContext3.getBean("dateOfNextDay");
+        System.out.println(obj instanceof LocalDate);
+        Object objBean = applicationContext3.getBean("&dateOfNextDay");
+        System.out.println(objBean instanceof FactoryBean);
+        System.out.println(objBean instanceof NextDayFactoryBean);
+
+        Object factoryValue = ((FactoryBean) objBean).getObject();
+        System.out.println(factoryValue instanceof LocalDate);
+
+        System.out.println(obj == factoryValue);
+        System.out.println(((LocalDate) obj).getDayOfYear() == ((LocalDate) factoryValue).getDayOfYear());
 
         System.out.println("start to testPrototypeBeans");
         testPrototypeBeans();
@@ -50,7 +66,7 @@ public class FactoryInjectMain {
         final MockNewsWithAwarePersister bean1 = applicationContext2.getBean(MockNewsWithAwarePersister.class);
         bean1.persistNews();
         bean1.persistNews();
-        
+
         final MockNewsWithObjectFactoryPersister bean2 = applicationContext2.getBean(MockNewsWithObjectFactoryPersister.class);
         bean2.persistNews();
         bean2.persistNews();

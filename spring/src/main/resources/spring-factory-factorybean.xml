@@ -1,0 +1,18 @@
+<!--
+  ~ Copyright (c) 2024, Xuelei Fan. All rights reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  -->
+
+<!-- spring-config.xml -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="nextDayDateDisplayer" class="cn.imcompany.factory.NextDayDateDisplayer">
+        <!-- Inject dependencies if any -->
+        <property name="dateOfNextDay" ref="dateOfNextDay"/>
+    </bean>
+
+    <bean id="dateOfNextDay" class="cn.imcompany.factory.NextDayFactoryBean" />
+</beans>

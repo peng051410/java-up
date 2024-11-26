@@ -14,4 +14,22 @@
     <!-- Define other beans if needed -->
     <bean id="newsListener" class="cn.imcompany.DowJonesNewsListenerV2"/>
     <bean id="newsPersister" class="cn.imcompany.DowJonesNewsPersisterV2"/>
+
+    <bean id="fxNewsBean" class="cn.imcompany.factory.FXNewsBean" scope="prototype"/>
+    <bean id="mockPersister" class="cn.imcompany.factory.MockNewsPersister">
+<!--        <property name="fxNewsBean" ref="fxNewsBean"/>-->
+        <lookup-method name="getFxNewsBean" bean="fxNewsBean"/>
+    </bean>
+
+    <bean id="mockNewsWithAwarePersister" class="cn.imcompany.factory.MockNewsWithAwarePersister"/>
+
+<!--    ServiceLocatorFactoryBean?实现-->
+    <bean id="objectFactory" class="org.springframework.beans.factory.config.ObjectFactoryCreatingFactoryBean">
+        <property name="targetBeanName">
+            <idref bean="fxNewsBean"/>
+        </property>
+    </bean>
+    <bean id="mockNewsWithObjectFactoryPersister" class="cn.imcompany.factory.MockNewsWithObjectFactoryPersister">
+        <property name="objectFactory" ref="objectFactory"/>
+    </bean>
 </beans>

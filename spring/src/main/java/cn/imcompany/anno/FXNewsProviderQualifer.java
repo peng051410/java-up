@@ -8,9 +8,8 @@ package cn.imcompany.anno;
 import cn.imcompany.IFXNewsListener;
 import cn.imcompany.INewsPersister;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * @author tomyli
@@ -18,17 +17,22 @@ import javax.annotation.Resource;
  * enjoy
  */
 @Component
-public class FXNewsProvider {
+public class FXNewsProviderQualifer {
 
-    @Resource
+    @Autowired
     private IFXNewsListener newsListener;
 
     @Autowired
     private INewsPersister newsPersister;
 
+    @Autowired
+    @Qualifier("myNewsReporter")
+    private INewsReporter newsRepoter;
+
     public void getAndPersistNews() {
         System.out.println(newsListener);
         newsListener.doJob();
         System.out.println(newsPersister);
+        System.out.println(newsRepoter);
     }
 }

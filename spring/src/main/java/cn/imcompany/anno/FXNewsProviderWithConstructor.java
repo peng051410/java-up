@@ -10,21 +10,22 @@ import cn.imcompany.INewsPersister;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Resource;
-
 /**
  * @author tomyli
  * @date 2024/11/19
  * enjoy
  */
 @Component
-public class FXNewsProvider {
+public class FXNewsProviderWithConstructor {
 
-    @Resource
-    private IFXNewsListener newsListener;
+    private final IFXNewsListener newsListener;
+    private final INewsPersister newsPersister;
 
     @Autowired
-    private INewsPersister newsPersister;
+    public FXNewsProviderWithConstructor(IFXNewsListener newsListener, INewsPersister newsPersister) {
+        this.newsListener = newsListener;
+        this.newsPersister = newsPersister;
+    }
 
     public void getAndPersistNews() {
         System.out.println(newsListener);

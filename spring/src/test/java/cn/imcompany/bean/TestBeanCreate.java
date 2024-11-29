@@ -2,12 +2,16 @@ package cn.imcompany.bean;
 
 import cn.imcompany.FXNewsProvider;
 import cn.imcompany.anno.DowJonesNewsListenerV2Anno;
+import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Todo：写点注释吧
@@ -38,6 +42,31 @@ public class TestBeanCreate {
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("cn.imcompany");
         final DowJonesNewsListenerV2Anno bean = context.getBean(DowJonesNewsListenerV2Anno.class);
         assertEquals("12345", bean.getEncodePassword());
+    }
+
+    @Test
+    public void testBeanConstructor() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-bean.xml");
+        ExampleBean myBean = context.getBean("myBean", ExampleBean.class);
+        System.out.println(myBean);
+
+        TargetBean targetBean = context.getBean("targetBean", TargetBean.class);
+        System.out.println(targetBean.getExampleBean());
+
+    }
+
+    @Test
+    public void testBeanPNameSpace() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-bean-p.xml");
+        BasicDataSource myBean = context.getBean("myBean", BasicDataSource.class);
+        System.out.println(myBean.getUrl());
+    }
+
+    @Test
+    public void testBeanProperties() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-bean-properties.xml");
+        BasicDataSource dataSource = context.getBean("dataSource", BasicDataSource.class);
+        System.out.println(dataSource.getUrl());
     }
 }
 

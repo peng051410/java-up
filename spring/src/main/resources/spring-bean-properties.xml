@@ -1,0 +1,27 @@
+<!--
+  ~ Copyright (c) 2024, Xuelei Fan. All rights reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  -->
+
+<!-- spring-config.xml -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Define FxNewsProvider bean -->
+    <bean id="mappings" class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="properties">
+            <value>
+                jdbc.driverClassName=com.mysql.cj.jdbc.Driver
+                jdbc.url=jdbc:mysql://localhost:3307/spring
+            </value>
+        </property>
+    </bean>
+
+    <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+    </bean>
+
+</beans>

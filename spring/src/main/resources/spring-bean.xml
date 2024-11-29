@@ -1,0 +1,24 @@
+<!--
+  ~ Copyright (c) 2024, Xuelei Fan. All rights reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  -->
+
+<!-- spring-config.xml -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Define FxNewsProvider bean -->
+    <bean id="myBean" class="cn.imcompany.bean.ExampleBean">
+        <!-- Inject dependencies if any -->
+        <constructor-arg name="years" value="100"/>
+        <constructor-arg name="ultimateAnswer" value="200"/>
+    </bean>
+
+    <bean id="targetBean" class="cn.imcompany.bean.TargetBean">
+        <property name="exampleBean" ref="myBean"/>
+    </bean>
+        <!-- Inject dependencies if any -->
+
+</beans>

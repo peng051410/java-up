@@ -68,5 +68,12 @@ public class TestBeanCreate {
         BasicDataSource dataSource = context.getBean("dataSource", BasicDataSource.class);
         System.out.println(dataSource.getUrl());
     }
+
+    @Test
+    public void testBeanMerge() {
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-bean-parent.xml");
+        ParentObject parentObject = context.getBean("child", ParentObject.class);
+        parentObject.getAdminEmails().forEach((k, v) -> System.out.println(k + " : " + v));
+    }
 }
 

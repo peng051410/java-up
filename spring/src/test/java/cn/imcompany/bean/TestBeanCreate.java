@@ -6,6 +6,7 @@ import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -74,6 +75,13 @@ public class TestBeanCreate {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-bean-parent.xml");
         ParentObject parentObject = context.getBean("child", ParentObject.class);
         parentObject.getAdminEmails().forEach((k, v) -> System.out.println(k + " : " + v));
+    }
+
+    @Test
+    public void testMapGeneric() {
+        ApplicationContext context = new ClassPathXmlApplicationContext("spring-bean-generic.xml");
+        SomeClass someClass = context.getBean(SomeClass.class);
+        someClass.getAccounts().forEach((k, v) -> System.out.println(k + " : " + v));
     }
 }
 

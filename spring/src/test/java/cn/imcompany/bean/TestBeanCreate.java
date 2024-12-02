@@ -83,5 +83,29 @@ public class TestBeanCreate {
         SomeClass someClass = context.getBean(SomeClass.class);
         someClass.getAccounts().forEach((k, v) -> System.out.println(k + " : " + v));
     }
+
+    @Test
+    public void testSingleDepedenOnPrototype() {
+        // 这种实现耦合度太高，不推荐
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-config-single-prototype.xml");
+        context.getBean("commandManager", CommandManager.class).process(null);
+        context.getBean("commandManager", CommandManager.class).process(null);
+    }
+
+    @Test
+    public void testSingleDepedenOnPrototypeWithLookUp() {
+        // 推荐使用lookup-method
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-config-single-prototype.xml");
+        context.getBean("commandManagerV2", CommandManagerV2.class).process(null);
+        context.getBean("commandManagerV2", CommandManagerV2.class).process(null);
+    }
+
+    @Test
+    public void testSingleDepedenOnPrototypeWithLookUpAnno() {
+        // 推荐使用lookup-method
+        ApplicationContext context = new AnnotationConfigApplicationContext("cn.imcompany.bean");
+        context.getBean(CommandManagerAnno.class).process(null);
+        context.getBean(CommandManagerAnno.class).process(null);
+    }
 }
 

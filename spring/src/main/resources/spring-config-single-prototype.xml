@@ -1,0 +1,17 @@
+<!-- spring-config.xml -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- Define FxNewsProvider bean -->
+    <bean id="command" class="cn.imcompany.bean.Command" scope="prototype">
+    </bean>
+
+    <bean id="commandManager" class="cn.imcompany.bean.CommandManager">
+    </bean>
+
+    <bean id="commandManagerV2" class="cn.imcompany.bean.CommandManagerV2">
+        <lookup-method name="createCommand" bean="command"/>
+    </bean>
+</beans>

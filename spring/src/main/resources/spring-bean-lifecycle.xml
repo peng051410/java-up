@@ -1,0 +1,23 @@
+<!--
+  ~ Copyright (c) 2024, Xuelei Fan. All rights reserved.
+  ~ DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+  -->
+
+<!-- spring-config.xml -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd"
+       default-init-method="init">
+
+    <!-- Define FxNewsProvider bean -->
+    <bean id="blogService" class="cn.imcompany.lifecycle.BlogServiceImpl">
+        <!-- Inject dependencies if any -->
+        <property name="blogDao" ref="blogDao"/>
+    </bean>
+
+    <bean id="blogDao" class="cn.imcompany.lifecycle.BlogDao">
+    </bean>
+    <!-- Inject dependencies if any -->
+
+</beans>

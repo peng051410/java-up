@@ -11,6 +11,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -106,6 +107,43 @@ public class TestBeanCreate {
         ApplicationContext context = new AnnotationConfigApplicationContext("cn.imcompany.bean");
         context.getBean(CommandManagerAnno.class).process(null);
         context.getBean(CommandManagerAnno.class).process(null);
+    }
+
+    @Test
+    public void testBeanInInterface() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("cn.imcompany.bean");
+        String baseConfig = context.getBean("baseConfig", String.class);
+        assertEquals("baseConfig", baseConfig);
+    }
+
+    @Test
+    public void testBeanInnerRef() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("cn.imcompany.bean");
+        assertNotNull(context.getBean("beanOne", BeanOne.class).getBeanTwo());
+    }
+
+    @Test
+    public void testBeanInnerRefMultiTimes() {
+
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("cn.imcompany.bean");
+        ClientService clientService1 = context.getBean("clientService1", ClientService.class);
+        ClientService clientService2 = context.getBean("clientService2", ClientService.class);
+        assertSame(clientService1.getClientDao(), clientService2.getClientDao());
+    }
+
+    @Test
+    public void testBeanImport() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ConfigB.class);
+        assertNotNull(context.getBean("a", A.class));
+        assertNotNull(context.getBean("b", B.class));
+    }
+
+    @Test
+    public void testBeanImportThroughMultiConfig() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SystemTestConfig.class);
+        TransferService transferService = context.getBean(TransferService.class);
+        assertNotNull(transferService);
+        transferService.transfer();
     }
 }
 

@@ -145,5 +145,13 @@ public class TestBeanCreate {
         assertNotNull(transferService);
         transferService.transfer();
     }
+
+    @Test
+    public void testBeanImportThroughMultiConfig_withInterface() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(SystemTestConfigV2.class);
+        TransferService transferService = context.getBean(TransferService.class);
+        assertNotNull(transferService);
+        transferService.transfer();
+    }
 }
 

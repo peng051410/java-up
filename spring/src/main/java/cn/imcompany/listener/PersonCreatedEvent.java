@@ -13,4 +13,7 @@ package cn.imcompany.listener;
 public class PersonCreatedEvent extends EntityCreatedEvent<Person> {
 
 
+    public PersonCreatedEvent(Person source) {
+        super(source);
+    }
 }

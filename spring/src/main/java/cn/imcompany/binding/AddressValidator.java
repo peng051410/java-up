@@ -5,6 +5,7 @@
 
 package cn.imcompany.binding;
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
@@ -13,6 +14,7 @@ import org.springframework.validation.Validator;
  * @date 2024/12/20
  * enjoy
  */
+@Component
 public class AddressValidator implements Validator {
 
     @Override

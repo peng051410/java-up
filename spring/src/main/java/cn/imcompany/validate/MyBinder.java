@@ -6,7 +6,6 @@
 package cn.imcompany.validate;
 
 
-import org.springframework.beans.MutablePropertyValues;
 import org.springframework.validation.DataBinder;
 
 /**
@@ -18,11 +17,10 @@ public class MyBinder {
 
     public static void main(String[] args) {
         Foo target = new Foo();
+        target.setName("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
 
         DataBinder binder = new DataBinder(target);
         binder.setValidator(new MyValidator());
-
-        binder.bind(new MutablePropertyValues());
 
         binder.validate();
 

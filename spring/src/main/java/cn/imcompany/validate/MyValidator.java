@@ -26,7 +26,7 @@ public class MyValidator implements Validator {
         Foo target1 = (Foo) target;
         if (target1.getName() == null) {
             errors.rejectValue("name", "name.required");
-        } else if (target1.getName().length() > 100) {
+        } else if (target1.getName().length() > 10) {
             errors.rejectValue("name", "name.too.long");
         }
     }

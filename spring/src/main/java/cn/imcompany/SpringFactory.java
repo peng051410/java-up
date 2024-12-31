@@ -14,9 +14,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.support.RootBeanDefinition;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.support.GenericApplicationContext;
-import org.springframework.core.io.ClassPathResource;
 
 /**
  * @author tomyli
@@ -36,7 +34,7 @@ public class SpringFactory {
         System.out.println("====================================");
         loadWithXml(beanRegistry);
         System.out.println("====================================");
-        loadWithXmlByFactory(beanRegistry);
+        // loadWithXmlByFactory(beanRegistry);
 
         System.out.println("====================================");
         loadWithGenericXml();
@@ -49,11 +47,11 @@ public class SpringFactory {
         genericApplicationContext.getBean(FXNewsProviderV2.class).getAndPersistNews();
     }
 
-    private static void loadWithXmlByFactory(DefaultListableBeanFactory beanRegistry) {
-        BeanFactory xmlBeanFactory = new XmlBeanFactory(new ClassPathResource("spring-config-factory.xml"));
-        FXNewsProviderV2 newsProvider = xmlBeanFactory.getBean("fxNewsProvider", FXNewsProviderV2.class);
-        newsProvider.getAndPersistNews();
-    }
+    // private static void loadWithXmlByFactory(DefaultListableBeanFactory beanRegistry) {
+    //     BeanFactory xmlBeanFactory = new XmlBeanFactory(new ClassPathResource("spring-config-factory.xml"));
+    //     FXNewsProviderV2 newsProvider = xmlBeanFactory.getBean("fxNewsProvider", FXNewsProviderV2.class);
+    //     newsProvider.getAndPersistNews();
+    // }
 
     private static void loadWithXml(DefaultListableBeanFactory beanRegistry) {
 

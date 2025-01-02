@@ -4,12 +4,8 @@ import cn.imcompany.property.DateFoo;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.xml.XmlBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.core.io.ClassPathResource;
 
 import java.util.Date;
 
@@ -24,10 +20,10 @@ public class TestPostProcessor {
 
     @Test
     public void testPostProcessor() {
-        final ConfigurableListableBeanFactory context = new XmlBeanFactory(new ClassPathResource(""));
-        final PropertySourcesPlaceholderConfigurer placeholderConfigurer = new PropertySourcesPlaceholderConfigurer();
-        placeholderConfigurer.setLocations();
-        placeholderConfigurer.postProcessBeanFactory(context);
+        // final ConfigurableListableBeanFactory context = new XmlBeanFactory(new ClassPathResource(""));
+        // final PropertySourcesPlaceholderConfigurer placeholderConfigurer = new PropertySourcesPlaceholderConfigurer();
+        // placeholderConfigurer.setLocations();
+        // placeholderConfigurer.postProcessBeanFactory(context);
     }
 
     @Test

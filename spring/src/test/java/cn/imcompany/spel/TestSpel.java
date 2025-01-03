@@ -8,7 +8,10 @@ package cn.imcompany.spel;
 import org.junit.jupiter.api.Test;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
+import org.springframework.expression.spel.SpelCompilerMode;
+import org.springframework.expression.spel.SpelParserConfiguration;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
+import org.springframework.expression.spel.support.SimpleEvaluationContext;
 
 import java.util.GregorianCalendar;
 
@@ -72,5 +75,52 @@ public class TestSpel {
 
         exp = parser.parseExpression("name == 'Nikola Tesla'");
         assertEquals(Boolean.TRUE, exp.getValue(tesla, Boolean.class));
+    }
+
+    @Test
+    public void testEvaluationContext() {
+
+        Simple simple = new Simple();
+        simple.booleanList.add(true);
+
+        ExpressionParser parser = new SpelExpressionParser();
+
+        SimpleEvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+
+        // "false" is passed in here as a String. SpEL and the conversion service
+        // will recognize that it needs to be a Boolean and convert it accordingly.
+        parser.parseExpression("booleanList[0]").setValue(context, simple, false);
+
+        assertEquals(false, simple.booleanList.get(0));
+    }
+
+    @Test
+    public void testSpelConfigure() {
+
+        SpelParserConfiguration config = new SpelParserConfiguration(true, true);
+        ExpressionParser parser = new SpelExpressionParser(config);
+
+        Expression expression = parser.parseExpression("list[3]");
+
+        Demo demo = new Demo();
+
+        Object o = expression.getValue(demo);
+
+        System.out.println(o);
+        assertEquals(4, demo.list.size());
+    }
+
+    @Test
+    public void testConfigParam() {
+
+        // spring.expression.compiler.mode
+        SpelParserConfiguration config = new SpelParserConfiguration(SpelCompilerMode.IMMEDIATE, this.getClass().getClassLoader());
+        SpelExpressionParser parser = new SpelExpressionParser(config);
+
+        Expression expr = parser.parseExpression("payload");
+
+        MyMessage myMessage = new MyMessage();
+
+        Object payload = expr.getValue(myMessage);
     }
 }

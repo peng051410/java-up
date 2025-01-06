@@ -5,7 +5,9 @@
 
 package cn.imcompany.spel;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.spel.SpelCompilerMode;
@@ -122,5 +124,12 @@ public class TestSpel {
         MyMessage myMessage = new MyMessage();
 
         Object payload = expr.getValue(myMessage);
+    }
+
+    @Test
+    public void testSpelInBean() {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext("cn.imcompany.spel");
+        ShapeGuess bean = context.getBean(ShapeGuess.class);
+        Assertions.assertEquals(100, bean.getInitialShapeSeed());
     }
 }

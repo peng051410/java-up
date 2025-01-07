@@ -14,26 +14,26 @@ import java.util.Map;
  * @date 2025/1/2
  * enjoy
  */
-public record Inventor(String name, Date birthDay, String nationality, List<String> inventions, Map<String, String> officers) {
+public record Inventor(String name, Date birthDay, String nationality, List<String> inventions, Map<String, String> officers, int counter) {
 
     public Inventor(String name, Date birthDay) {
-        this(name, birthDay, "Unknown", List.of(), Map.of());
+        this(name, birthDay, "Unknown", List.of(), Map.of(), 0);
     }
 
     public Inventor(String name, Date birthDay, String nationality) {
-        this(name, birthDay, nationality, List.of(), Map.of());
+        this(name, birthDay, nationality, List.of(), Map.of(), 0);
     }
 
     public Inventor(String name, Date birthDay, List<String> inventions) {
-        this(name, birthDay, "Unknown", inventions, Map.of());
+        this(name, birthDay, "Unknown", inventions, Map.of(), 0);
     }
 
-    public Inventor(String name, Date birth, String nationality, String... inventions) {
-        this(name, birth, nationality, List.of(inventions), Map.of());
+    public Inventor(String name, Date birth, String nationality, List<String> inventions, Map<String, String> officers) {
+        this(name, birth, nationality, inventions, officers, 0);
     }
 
     public Inventor(String name, Date birth, String nationality, List<String> inventions) {
-        this(name, birth, nationality, inventions, Map.of());
+        this(name, birth, nationality, inventions, Map.of(), 0);
     }
 
 

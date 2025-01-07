@@ -7,6 +7,7 @@ package cn.imcompany.spel;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.IndexAccessor;
@@ -17,6 +18,7 @@ import org.springframework.expression.spel.support.ReflectiveIndexAccessor;
 import org.springframework.expression.spel.support.SimpleEvaluationContext;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
 
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
@@ -309,5 +311,112 @@ public class TestSpel {
 
         Object value1 = parser.parseExpression("'abc'.substring(1, 3)").getValue();
         assertEquals("bc", value1);
+    }
+
+    @Test
+    public void testSpelOperator() {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        Object value = parser.parseExpression("1 + 2").getValue();
+        assertEquals(3, value);
+
+        Object value1 = parser.parseExpression("1 < -5.0").getValue();
+        assertEquals(false, value1);
+
+        Object value2 = parser.parseExpression("'black' < 'block'").getValue();
+        assertEquals(true, value2);
+
+        Object value3 = parser.parseExpression("'xyz' instanceof T(Integer)").getValue();
+        assertEquals(false, value3);
+
+        // 对类的引用要用全限定名
+        boolean trueValue = Boolean.TRUE.equals(parser.parseExpression("new cn.imcompany.spel.CustomValue(1) < new cn.imcompany.spel.CustomValue(2)"
+        ).getValue(Boolean.class));
+        assertEquals(true, trueValue);
+
+        Boolean value4 = parser.parseExpression("1 between {1, 5}").getValue(Boolean.class);
+        assertEquals(true, value4);
+
+        Boolean value5 = parser.parseExpression("'elephant' between {'ant', 'hippo'}").getValue(Boolean.class);
+        assertEquals(true, value5);
+
+        Boolean value6 = parser.parseExpression("'5.00' matches '^-?\\d+(\\.\\d{2})?$'").getValue(Boolean.class);
+        assertEquals(true, value6);
+
+        Boolean trueAndFalse = parser.parseExpression("true and false").getValue(Boolean.class);
+        assertEquals(false, trueAndFalse);
+
+        Boolean trueOrFalse = parser.parseExpression("true or false").getValue(Boolean.class);
+        assertEquals(true, trueOrFalse);
+
+        String value7 = parser.parseExpression("'hello' + '' + 'world'").getValue(String.class);
+        assertEquals("helloworld", value7);
+
+        Character value8 = parser.parseExpression("'d' - 3").getValue(char.class);
+        assertEquals('a', value8);
+
+        String value9 = parser.parseExpression("'abc' * 2").getValue(String.class);
+        assertEquals("abcabc", value9);
+
+        Integer value10 = parser.parseExpression("1 + 1").getValue(int.class);
+        assertEquals(2, value10);
+
+        MyInt myInt = new MyInt();
+        EvaluationContext context = SimpleEvaluationContext.forReadWriteDataBinding().build();
+        Integer value11 = parser.parseExpression("counter++ + 2").getValue(context, myInt, int.class);
+        // counter is now 1
+        assertEquals(2, value11);
+
+        Integer value12 = parser.parseExpression("++counter + 2").getValue(context, myInt, int.class);
+        // counter is now 2
+        assertEquals(4, value12);
+    }
+
+    @Test
+    public void testSpelSet() {
+        MyInt myInt = new MyInt();
+        SpelExpressionParser parser = new SpelExpressionParser();
+        SimpleEvaluationContext context = SimpleEvaluationContext.forReadWriteDataBinding().build();
+        parser.parseExpression("name").setValue(context, myInt, "Tony");
+        assertEquals("Tony", myInt.getName());
+
+        String value = parser.parseExpression("name = 'alaaaa'").getValue(context, myInt, String.class);
+        assertEquals("alaaaa", value);
+    }
+
+    @Test
+    public void testSpelOverloadOperator() {
+
+        StandardEvaluationContext context = new StandardEvaluationContext();
+        context.setOperatorOverloader(new ListConcatenation());
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        List value = parser.parseExpression("{1, 2, 3} + {4, 5, 6}").getValue(context, List.class);
+        System.out.println(value);
+        assertEquals(6, value.size());
+    }
+
+    @Test
+    public void testSpelTypes() {
+        //The StandardEvaluationContext uses a TypeLocator to find types, and the StandardTypeLocator (which can be replaced) is built with an
+        // understanding of the java.lang package.
+        SpelExpressionParser parser = new SpelExpressionParser();
+        Class value = parser.parseExpression("T(java.util.Date)").getValue(Class.class);
+        assertEquals(Date.class, value);
+
+        Class value1 = parser.parseExpression("T(String)").getValue(Class.class);
+        assertEquals(String.class, value1);
+
+        Boolean value2 = parser.parseExpression(("T(java.math.RoundingMode).CEILING < T(java.math.RoundingMode).FLOOR")).getValue(Boolean.class);
+        assertEquals(true, value2);
+
+    }
+
+    @Test
+    public void testSpelConstructors() {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        Inventor value = parser.parseExpression("new cn.imcompany.spel.Inventor('Nikola Tesla', new java.util.Date())").getValue(Inventor.class);
+        assertNotNull(value);
     }
 }

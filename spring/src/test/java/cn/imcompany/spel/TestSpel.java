@@ -5,6 +5,9 @@
 
 package cn.imcompany.spel;
 
+import cn.imcompany.spel.inventor.InventorV2;
+import cn.imcompany.spel.inventor.PlaceOfBirth;
+import cn.imcompany.spel.inventor.Society;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.expression.EvaluationContext;
@@ -17,7 +20,12 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
 import org.springframework.expression.spel.support.ReflectiveIndexAccessor;
 import org.springframework.expression.spel.support.SimpleEvaluationContext;
 import org.springframework.expression.spel.support.StandardEvaluationContext;
+import org.springframework.util.StringUtils;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -418,5 +426,190 @@ public class TestSpel {
         SpelExpressionParser parser = new SpelExpressionParser();
         Inventor value = parser.parseExpression("new cn.imcompany.spel.Inventor('Nikola Tesla', new java.util.Date())").getValue(Inventor.class);
         assertNotNull(value);
+    }
+
+    @Test
+    public void testSpelVariable() {
+
+        MyInventor tesla = new MyInventor("Nikola Tesla", new Date());
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        SimpleEvaluationContext context = SimpleEvaluationContext.forReadWriteDataBinding().build();
+
+        context.setVariable("newName", "Mike Tesla");
+        String value = parser.parseExpression("name = #newName").getValue(context, tesla, String.class);
+        assertEquals("Mike Tesla", value);
+        String name = tesla.getName();
+        assertEquals("Mike Tesla", name);
+    }
+
+    @Test
+    public void testSeplVarThis() {
+
+        List<Integer> prims = List.of(2, 3, 5, 7, 11, 13, 17);
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        SimpleEvaluationContext context = SimpleEvaluationContext.forReadWriteDataBinding().build();
+        context.setVariable("primes", prims);
+
+        // select all prime numbers > 10
+        String expression = "#primes.?[#this>10]";
+
+        List<Integer> value = parser.parseExpression(expression).getValue(context, List.class);
+        assertEquals(List.of(11, 13, 17), value);
+        assertEquals(3, value.size());
+    }
+
+    @Test
+    public void testSpelThisAndRoot() {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        SimpleEvaluationContext context = SimpleEvaluationContext.forReadWriteDataBinding().build();
+
+        MyInventor tesla = new MyInventor("Nikola Tesla", new Date());
+        tesla.setInventions("Telephone repeater", "Tesla coil transformer", "Induction motor");
+
+        // 表达式是变的，可以进行动态的拼接
+        String expression = "#root.inventions.![#root.name + ' invented ' + #this + '.']";
+
+        List value = parser.parseExpression(expression).getValue(context, tesla, List.class);
+        assertEquals(List.of("Nikola Tesla invented Telephone repeater.", "Nikola Tesla invented Tesla coil transformer.", "Nikola Tesla invented " +
+                "Induction motor."), value);
+        assertEquals(3, value.size());
+    }
+
+    @Test
+    public void testSeplFunction() throws NoSuchMethodException {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+
+        SimpleEvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+        context.setVariable("hasText", StringUtils.class.getMethod("hasText", String.class));
+
+        Boolean value = parser.parseExpression("#hasText('hello')").getValue(context, Boolean.class);
+        assertEquals(true, value);
+    }
+
+    @Test
+    public void testSpelMethodHandle() throws NoSuchMethodException, IllegalAccessException {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        SimpleEvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+
+        MethodHandle mh = MethodHandles.lookup().findVirtual(String.class, "formatted", MethodType.methodType(String.class, Object[].class));
+        context.setVariable("message", mh);
+
+        String value = parser.parseExpression("#message('Simple message: <%s>', 'Hello World', 'ignored')").getValue(context, String.class);
+        assertEquals("Simple message: <Hello World>", value);
+    }
+
+    @Test
+    public void testSpelFunctionParam() throws NoSuchMethodException, IllegalAccessException {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        SimpleEvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+
+        String template = "This is a %s message with %s words: <%s>";
+        Object varargs = new Object[]{"prerecorded", 3, "Oh Hello World", "ignored"};
+
+        MethodHandle mh = MethodHandles.lookup().findVirtual(String.class, "formatted", MethodType.methodType(String.class, Object[].class))
+                .bindTo(template)
+                .bindTo(varargs);
+        context.setVariable("message", mh);
+
+        String value = parser.parseExpression("#message()").getValue(context, String.class);
+        assertEquals("This is a prerecorded message with 3 words: <Oh Hello World>", value);
+    }
+
+    @Test
+    public void testSpelVarargs() throws NoSuchMethodException {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        String expression = "'%s is color #%d'.formatted('Blue', 2)";
+        String value = parser.parseExpression(expression).getValue(String.class);
+        assertEquals("Blue is color #2", value);
+
+        String expression1 = "'%s is color #%d'.formatted(new Object[] {'Blue', 2})";
+        String value1 = parser.parseExpression(expression1).getValue(String.class);
+        assertEquals("Blue is color #2", value1);
+
+        String expression2 = "'%s is color #%d'.formatted({'Blue', 2})";
+        String value2 = parser.parseExpression(expression2).getValue(String.class);
+        assertEquals("Blue is color #2", value2);
+
+        // type conversion test
+        SimpleEvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+        context.setVariable("sortStringArray", StringUtils.class.getMethod("sortStringArray", String[].class));
+        String expression3 = "#sortStringArray({'c', '3.0', '11'})";
+        String[] value3 = parser.parseExpression(expression3).getValue(context, String[].class);
+        Arrays.stream(value3).forEach(System.out::println);
+        assertEquals(3, value3.length);
+    }
+
+    @Test
+    public void testSpelBeanRef() {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        StandardEvaluationContext context = new StandardEvaluationContext();
+        context.setBeanResolver(new MyBeanResolver());
+
+        Object value = parser.parseExpression("@inventor").getValue(context);
+        assertNotNull(value);
+
+        // 通过&符号获取工厂bean
+        Object factoryBean = parser.parseExpression("&someFactoryBean").getValue(context);
+        assertNull(factoryBean);
+    }
+
+    @Test
+    public void testSpelIfElse() {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        String value = parser.parseExpression("true ? 'a' : 'b'").getValue(String.class);
+        assertEquals("a", value);
+
+        // @Value("#{systemProperties['pop3.port'] ?: 25}")
+        String name = parser.parseExpression("name?:'Unknown'").getValue(new MyInventor(), String.class);
+        assertEquals("Unknown", name);
+    }
+
+    @Test
+    public void testSafeNav() {
+
+        ExpressionParser parser = new SpelExpressionParser();
+        EvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+
+        InventorV2 tesla = new InventorV2("Nikola Tesla", "Serbian");
+        tesla.setPlaceOfBirth(new PlaceOfBirth("Smiljan"));
+
+        String city = parser.parseExpression("placeOfBirth?.city")
+                .getValue(context, tesla, String.class);
+        assertEquals("Smiljan", city);
+
+        tesla.setPlaceOfBirth(null);
+
+        city = parser.parseExpression("placeOfBirth?.city")
+                .getValue(context, tesla, String.class);
+        assertNull(city);
+    }
+
+    @Test
+    public void testSpelSafeIndex() {
+
+        ExpressionParser parser = new SpelExpressionParser();
+        Society society = new Society();
+        EvaluationContext context = new StandardEvaluationContext(society);
+
+        // if the collection is empty, invoke index accessor will throw an exception
+//         InventorV2 inventor = parser.parseExpression("members?.[0]")
+//                 .getValue(context, InventorV2.class);
+//         assertNull(inventor);
+
+        society.setMembers(null);
+
+// evaluates to null - does not throw an exception
+        InventorV2 inventor = parser.parseExpression("members?.[0]")
+                .getValue(context, InventorV2.class);
+        assertNull(inventor);
     }
 }

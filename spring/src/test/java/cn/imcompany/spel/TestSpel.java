@@ -14,6 +14,7 @@ import org.springframework.expression.EvaluationContext;
 import org.springframework.expression.Expression;
 import org.springframework.expression.ExpressionParser;
 import org.springframework.expression.IndexAccessor;
+import org.springframework.expression.common.TemplateParserContext;
 import org.springframework.expression.spel.SpelCompilerMode;
 import org.springframework.expression.spel.SpelParserConfiguration;
 import org.springframework.expression.spel.standard.SpelExpressionParser;
@@ -611,5 +612,40 @@ public class TestSpel {
         InventorV2 inventor = parser.parseExpression("members?.[0]")
                 .getValue(context, InventorV2.class);
         assertNull(inventor);
+    }
+
+    @Test
+    public void testSpelCollectionSelect() {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        EvaluationContext context = SimpleEvaluationContext.forReadOnlyDataBinding().build();
+        Map<String, Integer> map = Map.of("tomyi", 23, "tomyli2", 24, "tomyli1", 25);
+        context.setVariable("map", map);
+
+        Map<String, Integer> value = parser.parseExpression("#map.?[value > 23]").getValue(context, Map.class);
+        assertEquals(Map.of("tomyli2", 24, "tomyli1", 25), value);
+        assertEquals(2, value.size());
+
+
+        InventorV2 tesla = new InventorV2("Nikola Tesla", "Serbian");
+        tesla.setPlaceOfBirth(new PlaceOfBirth("Smiljan"));
+
+        InventorV2 inventorV2 = new InventorV2("tomyli", "Chinese");
+        inventorV2.setPlaceOfBirth(new PlaceOfBirth("Shanghai"));
+
+        Society society = new Society();
+        society.setMembers(List.of(tesla, inventorV2));
+
+        List value1 = parser.parseExpression("members.![placeOfBirth.city]").getValue(context, society, List.class);
+        assertEquals(List.of("Smiljan", "Shanghai"), value1);
+    }
+
+    @Test
+    public void testSpelTemplate() {
+
+        SpelExpressionParser parser = new SpelExpressionParser();
+        String value = parser.parseExpression("random number is #{T(java.lang.Math).random()}",
+                new TemplateParserContext()).getValue(String.class);
+        System.out.println(value);
     }
 }

@@ -1,0 +1,20 @@
+/*
+ * Copyright (c) 2025, Xuelei Fan. All rights reserved.
+ * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+ */
+
+package cn.imcompany.aop;
+
+import java.util.Collection;
+
+/**
+ * @author tomyli
+ * @date 2025/1/10
+ * enjoy
+ */
+public interface Sample<T> {
+    
+    void sampleGenericMethod(T param);
+
+    void sampleGenericCollectionMethod(Collection<T> param);
+}

@@ -5,14 +5,15 @@
 
 package cn.imcompany.aop;
 
-import org.springframework.beans.factory.annotation.Configurable;
-
 /**
- *
  * @author tomyli
  * @date 2025/1/10
  * enjoy
  */
-@Configurable
-public class Account {
+public class DefaultUsageTracked implements UsageTracked {
+
+    @Override
+    public void incrementUseCount() {
+        System.out.println("incrementUseCount");
+    }
 }

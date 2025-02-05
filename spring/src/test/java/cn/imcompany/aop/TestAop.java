@@ -6,8 +6,11 @@
 package cn.imcompany.aop;
 
 import cn.imcompany.aop.example.ProfilingService;
+import cn.imcompany.aop.proxy.Person;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author tomyli
@@ -22,5 +25,22 @@ public class TestAop {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-aop-aspectj.xml");
         ProfilingService service = context.getBean(ProfilingService.class);
         service.doSomething();
+    }
+
+    @Test
+    public void testProxyFactoryBean() {
+
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-aop-bean.xml");
+        Person bean = context.getBean(Person.class);
+        assertNotNull(bean);
+        System.out.println(bean.getClass());
+    }
+    @Test
+    public void testProxyFactoryInnerBean() {
+
+        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-aop-inner-bean.xml");
+        Person bean = context.getBean(Person.class);
+        assertNotNull(bean);
+        System.out.println(bean.getClass());
     }
 }

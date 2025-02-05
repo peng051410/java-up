@@ -5,15 +5,19 @@
 
 package cn.imcompany.aop.api;
 
+import org.springframework.aop.support.StaticMethodMatcherPointcut;
+
+import java.lang.reflect.Method;
+
 /**
  * @author tomyli
  * @date 2025/1/16
  * enjoy
  */
-public class TestStaticPointcut extends StaticMehodMatcherPointcut {
+public class TestStaticPointcut extends StaticMethodMatcherPointcut {
 
     @Override
-    public boolean matches(String methodName) {
-        return methodName.startsWith("get");
+    public boolean matches(Method method, Class<?> targetClass) {
+        return false;
     }
 }

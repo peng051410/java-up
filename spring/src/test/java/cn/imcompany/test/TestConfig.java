@@ -5,6 +5,8 @@
 
 package cn.imcompany.test;
 
+import cn.imcompany.junit.GreetingService;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -15,4 +17,14 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class TestConfig {
+
+    @Bean
+    public OrderService orderService() {
+        return new OrderService();
+    }
+
+    @Bean
+    public GreetingService greetingService() {
+        return new GreetingService();
+    }
 }

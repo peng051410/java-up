@@ -5,10 +5,13 @@
 
 package cn.imcompany.aop;
 
-import cn.imcompany.aop.example.ProfilingService;
 import cn.imcompany.aop.proxy.Person;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.testcontainers.shaded.com.google.common.collect.Lists;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -22,9 +25,16 @@ public class TestAop {
     @Test
     public void testAspectJLoadWeaver() {
 
-        ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-aop-aspectj.xml");
-        ProfilingService service = context.getBean(ProfilingService.class);
-        service.doSomething();
+        List<Integer> list = new ArrayList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        List<List<Integer>> partition = Lists.partition(list, 2);
+        System.out.println(partition.size());
+
+        // ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring-aop-aspectj.xml");
+        // ProfilingService service = context.getBean(ProfilingService.class);
+        // service.doSomething();
     }
 
     @Test

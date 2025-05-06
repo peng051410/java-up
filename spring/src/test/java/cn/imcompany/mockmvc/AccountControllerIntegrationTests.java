@@ -6,7 +6,6 @@
 package cn.imcompany.mockmvc;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.servlet.assertj.MockMvcTester;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -15,7 +14,7 @@ import org.springframework.web.context.WebApplicationContext;
  * @date 2025/2/25
  * enjoy
  */
-@SpringJUnitConfig(ApplicationWebConfiguration.class)
+// @SpringJUnitConfig(ApplicationWebConfiguration.class)
 public class AccountControllerIntegrationTests {
 
     private final MockMvcTester mockMvc;

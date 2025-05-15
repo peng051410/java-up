@@ -19,8 +19,10 @@ import org.springframework.context.annotation.FilterType;
 @Configuration
 @ComponentScan(
         basePackages = {"cn.imcompany.bean.scan"},
-        includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {SpecialComponent.class}),
-        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {AdminService.class})
+        includeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {SpecialComponent.class})
 )
+@ComponentScan(
+        basePackages = {"cn.imcompany.bean.scan"},
+        excludeFilters = @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = {AdminService.class}))
 public class MyConfiguration {
 }

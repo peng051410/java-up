@@ -17,6 +17,7 @@ public class Main {
     public static void main(String[] args) {
         // 1. 创建 Spring 容器
         AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MyConfiguration.class);
+
         for (String name : context.getBeanDefinitionNames()) {
             System.out.println(name);
         }

@@ -7,6 +7,7 @@ package cn.imcompany.bean.bean;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Description;
 
 /**
  * @author tomyli
@@ -22,6 +23,7 @@ public class MyConfiguration {
     }
 
     @Bean
+    @Description("This is a MyBean2 bean")
     public MyBean2 myBean2() {
         return new MyBean2();
     }

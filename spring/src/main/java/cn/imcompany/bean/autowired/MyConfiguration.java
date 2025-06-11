@@ -5,9 +5,15 @@
 
 package cn.imcompany.bean.autowired;
 
+import org.springframework.beans.factory.config.CustomEditorConfigurer;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+
+import java.beans.PropertyEditor;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -20,4 +26,12 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:application.properties")
 public class MyConfiguration {
 
+    @Bean
+    public CustomEditorConfigurer customEditorConfigurer() {
+        CustomEditorConfigurer configurer = new CustomEditorConfigurer();
+        Map<Class<?>, Class<? extends PropertyEditor>> customEditors = new HashMap<>();
+        customEditors.put(StudentValue.class, StudentValueEditor.class);
+        configurer.setCustomEditors(customEditors);
+        return configurer;
+    }
 }

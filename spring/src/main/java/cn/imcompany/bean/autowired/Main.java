@@ -20,5 +20,6 @@ public class Main {
         MyController myController = context.getBean(MyController.class);
         myController.showService();
         System.out.println(myController.getUsername());
+        System.out.println(myController.getStudentValue());
     }
 }

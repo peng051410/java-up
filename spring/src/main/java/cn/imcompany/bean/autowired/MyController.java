@@ -22,6 +22,10 @@ public class MyController {
     @Getter
     private String username;
 
+    @Getter
+    @Value("student111")
+    private StudentValue studentValue;
+
     @Autowired
     MyService myService;
 

@@ -5,6 +5,7 @@
 
 package cn.imcompany.importannotation;
 
+import cn.imcompany.importannotation.bean.MyBeanG;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
@@ -14,6 +15,6 @@ import org.springframework.context.annotation.Import;
  * enjoy
  */
 @Configuration
-@Import({MyConfig2.class, MyComponentConfig.class, MyImportSelector.class, MyDeferredImportSelector.class, MyImportBeanDefinitionRegistrar.class})
+@Import({MyConfig2.class, MyComponentConfig.class, MyImportSelector.class, MyDeferredImportSelector.class, MyImportBeanDefinitionRegistrar.class, MyBeanG.class})
 public class MyConfig {
 }

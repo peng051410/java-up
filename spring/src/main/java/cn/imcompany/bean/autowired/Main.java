@@ -21,5 +21,9 @@ public class Main {
         myController.showService();
         System.out.println(myController.getUsername());
         System.out.println(myController.getStudentValue());
+
+        System.out.println(myController.teacherService);
+
+        myController.selfInjectService.selfInject();
     }
 }

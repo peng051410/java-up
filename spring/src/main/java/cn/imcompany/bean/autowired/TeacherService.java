@@ -5,21 +5,15 @@
 
 package cn.imcompany.bean.autowired;
 
-import lombok.Getter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 /**
  *
  * @author tomyli
- * @date 2025/6/5
+ * @date 2025/6/18
  * enjoy
  */
 @Service
-public class MyService {
-
-    @Value("${test.number}")
-    @Getter
-    private int number;
+public class TeacherService {
 
 }

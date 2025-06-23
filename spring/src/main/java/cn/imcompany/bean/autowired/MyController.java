@@ -22,12 +22,27 @@ public class MyController {
     @Getter
     private String username;
 
+    @Value("${test.number}")
+    @Getter
+    private int number;
+
     @Getter
     @Value("student111")
     private StudentValue studentValue;
 
     @Autowired
     MyService myService;
+
+    @Autowired
+    SelfInjectService selfInjectService;
+
+    TeacherService teacherService;
+
+    // It's unrecommended to use field injection, but it's still supported.
+    @Autowired
+    public void arbitraryInjection(TeacherService teacherService) {
+        this.teacherService = teacherService;
+    }
 
     public void showService() {
         System.out.println("myService = " + myService);
